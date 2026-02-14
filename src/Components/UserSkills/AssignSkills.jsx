@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import { authFetch } from "../jwt-storage/authFetch";
 
 export default function AssignSkill({ onUpdated }) {
-  // all available skills from admin catalog
-  const [skills, setSkills] = useState([]);
 
-  // form state matching your AssignSkillDTO
+  const [skills, setSkills] = useState([]);
   const [form, setForm] = useState({
     skillId: "",
     description: "",
@@ -13,28 +11,22 @@ export default function AssignSkill({ onUpdated }) {
     experience: "",
     serviceMode: "REMOTE"
   });
-
   const [message, setMessage] = useState("");
 
-  // load all skills when component mounts
   useEffect(() => {
     loadSkills();
   }, []);
 
   const loadSkills = async () => {
     try {
-      const data = await authFetch("/admin/skills"); 
-
-      // backend returns Page<SkillResponseDTO>
-      // so content is inside .content
-      setSkills(data.content ?? data);
+      const data = await authFetch("/admin/skills");
+      setSkills(data.content || data);
     } catch (err) {
       console.error(err);
-      setMessage("Failed to load skills");
+      setMessage(err.message || "Failed to load skills");
     }
   };
 
-  // handle form input
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -42,7 +34,6 @@ export default function AssignSkill({ onUpdated }) {
     });
   };
 
-  // submit assign request
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -64,12 +55,9 @@ export default function AssignSkill({ onUpdated }) {
         body: JSON.stringify(payload)
       });
 
-      setMessage("Skill assigned");
+      setMessage("Skill assigned successfully!");
+      if (onUpdated) onUpdated();
 
-      // tell parent to refresh profile
-      onUpdated();
-
-      // optional reset
       setForm({
         skillId: "",
         description: "",
@@ -79,7 +67,7 @@ export default function AssignSkill({ onUpdated }) {
       });
     } catch (err) {
       console.error(err);
-      setMessage("Failed to assign skill");
+      setMessage(err.message || "Failed to assign skill");
     }
   };
 
@@ -88,7 +76,6 @@ export default function AssignSkill({ onUpdated }) {
       <h3>Assign Skill</h3>
 
       <form onSubmit={handleSubmit}>
-        {/* skill dropdown */}
         <select
           name="skillId"
           value={form.skillId}
@@ -130,7 +117,6 @@ export default function AssignSkill({ onUpdated }) {
         />
         <br />
 
-        {/* service mode dropdown */}
         <select
           name="serviceMode"
           value={form.serviceMode}

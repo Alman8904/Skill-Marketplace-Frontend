@@ -1,33 +1,32 @@
+import { useState } from "react";
 import { authFetch } from "../jwt-storage/authFetch";
 
-export default function DeleteUser({ onDelete }) {
-  const handleDelete = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete your account?"
-    );
+export default function DeleteUser({ onDeleted }) {
 
-    if (!confirmDelete) return;
+  const [message, setMessage] = useState("");
+
+  const handleDelete = async () => {
+    if (!confirm("Are you sure you want to delete your account?")) return;
 
     try {
       await authFetch("/public/user/delete", {
-        method: "DELETE",
+        method: "DELETE"
       });
 
-      // tell parent user is gone
-      onDelete();
+      setMessage("Account deleted");
+      localStorage.removeItem("token");
+      if (onDeleted) onDeleted();
     } catch (err) {
+      setMessage(err.message || "Failed to delete account");
       console.error(err);
-      alert("Delete failed");
     }
   };
 
   return (
-    <div >
-      <button
-        onClick={handleDelete}
-      >
-        Delete Account
-      </button>
+    <div>
+      <h3>Delete Account</h3>
+      <button onClick={handleDelete}>Delete My Account</button>
+      <p>{message}</p>
     </div>
   );
 }

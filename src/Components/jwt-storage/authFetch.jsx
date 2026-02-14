@@ -1,11 +1,10 @@
-//adds jwt header at every auth endpoint 
+import { buildUrl } from "../../config/api";
 
-//takes url as argument for other endpoints too
 export async function authFetch(url, options = {}) {
-    //get jwt token from local storage
   const token = localStorage.getItem("token");
+  const fullUrl = buildUrl(url);
 
-  const res = await fetch(url, {
+  const res = await fetch(fullUrl, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -14,42 +13,40 @@ export async function authFetch(url, options = {}) {
     }
   });
 
-  //handles expired and unauth
-  if(res.status===401 || res.status===403){
+  if (res.status === 401 || res.status === 403) {
     localStorage.removeItem("token");
     window.location.reload();
     throw new Error("Unauthorized");
   }
 
   if (!res.ok) {
-  let errorMessage = "Request failed";
+    let errorMessage = "Request failed";
 
-  try {
-    const errData = await res.json();
-    errorMessage =
-      errData.message ||
-      errData.error ||
-      JSON.stringify(errData);
-    } catch {
+    try {
+      const contentType = res.headers.get("content-type");
       
+      if (contentType && contentType.includes("application/json")) {
+        const errData = await res.json();
+        errorMessage = errData.message || errData.error || JSON.stringify(errData);
+      } else {
+        errorMessage = await res.text();
+      }
+    } catch {
+      // If parsing fails, keep default message
     }
 
     throw new Error(errorMessage);
   }
 
-
-  // for no response but success
-  if(res.status===204){
+  if (res.status === 204) {
     return null;
-    }
+  }
 
-    const contentType = res.headers.get("content-type");
+  const contentType = res.headers.get("content-type");
 
   if (contentType && contentType.includes("application/json")) {
     return res.json();
   }
 
   return null;
-
-  
 }

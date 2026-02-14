@@ -1,57 +1,51 @@
 import { useState } from "react";
+import { buildUrl } from "../../config/api";
 
-export default function Login({onLoginSuccess}){
+export default function Login({ onLoginSuccess }) {
 
-    //form state empty first and setForm changes it when called
-    const[form,setForm]=useState({
-        username:"",
-        password:""
+  const [form, setForm] = useState({
+    username: "",
+    password: ""
+  });
+
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
     });
+  };
 
-    const[message, setMessage]=useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    //used to add data when called
-    //updates fields in form
-    const handleChange = (e) =>{
-        setForm({
-            ...form,
-            [e.target.name]:e.target.value
-        });
-    };
+    try {
+      const res = await fetch(buildUrl("/auth/login"), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
 
-    //when called does this logic
-    const handleSubmit= async(e)=>{
-        e.preventDefault();
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || "Login failed");
+      }
 
-        try{
-            const res = await fetch("/auth/login",{
-                method: "POST",
-                headers :{
-                    "Content-Type": "application/json"
-                },
-                body:JSON.stringify(form)
-            });
+      const token = await res.text();
+      localStorage.setItem("token", token);
 
-            if(!res.ok){
-                throw new Error("Login failed");
-            }
+      setMessage("Login successful");
+      onLoginSuccess();
+    } catch (err) {
+      setMessage(err.message || "Login failed");
+      console.error(err);
+    }
+  };
 
-            //extracting jwt token from backend
-            const token = await res.text();
-            //storing jwt token for using as header in other endpoints
-            localStorage.setItem("token",token);
-
-            setMessage("Login successful");
-            console.log("TOKEN", token);
-            //child callsback to parents fucntion
-            onLoginSuccess();
-        }catch (err){
-            setMessage("Login failed");
-            console.error(err);
-        }
-    };
-
-    return (
+  return (
     <div>
       <h2>Login</h2>
 
@@ -77,5 +71,4 @@ export default function Login({onLoginSuccess}){
       <p>{message}</p>
     </div>
   );
-    
 }
