@@ -1,6 +1,6 @@
 import { useState } from "react"
-import CreateUser from "./Components/Public endpoints/CreateUser.jsx"
-import Login from "./Components/Public endpoints/Login.jsx"
+import CreateUser from "./Components/Public-endpoints/CreateUser.jsx"
+import Login from "./Components/Public-endpoints/Login.jsx"
 import Profile from "./Components/User/Profile.jsx"
 
 function App() {

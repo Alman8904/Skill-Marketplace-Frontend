@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { authFetch } from "../jwt storage/authFetch";
+import { authFetch } from "../jwt-storage/authFetch";
 
 export default function UpdateProfile({onUpdated}){
     const[form , setForm] = useState({

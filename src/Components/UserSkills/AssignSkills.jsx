@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { authFetch } from "../jwt storage/authFetch";
+import { authFetch } from "../jwt-storage/authFetch";
 
 export default function AssignSkill({ onUpdated }) {
   // all available skills from admin catalog

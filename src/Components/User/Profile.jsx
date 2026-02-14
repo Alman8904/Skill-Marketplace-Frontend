@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { authFetch } from "../jwt storage/authFetch";
+import { authFetch } from "../jwt-storage/authFetch";
 import UpdateProfile from "./UpdateProfile";
 import DeleteUser from "./DeleteUser";
 import AssignSkill from "../UserSkills/AssignSkills";
@@ -44,10 +44,7 @@ export default function Profile({onLogout}) {
       <button onClick={onLogout}>Logout</button>
       <UpdateProfile onUpdated={loadProfile}/>
       <DeleteUser onDelete={onLogout}/>
-      {user.userType === "PROVIDER" && (
-        <AssignSkill onUpdated={loadProfile} />
-        
-      )}
+      
       {user.userType === "PROVIDER" && (
       <>
         <AssignSkill onUpdated={loadProfile} />
