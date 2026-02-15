@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { authFetch } from "../jwt-storage/authFetch";
+import UpdateUserSkill from "./UpdateUserSkill";
 
 export default function MySkills() {
 
