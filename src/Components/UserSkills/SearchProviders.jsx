@@ -103,8 +103,8 @@ export default function SearchProviders() {
         <div>
           <h4>Search Results:</h4>
           {providers.map((provider) => (
-            <div key={`${provider.userId}-${provider.skillName}`}>
-              <b>Provider: {provider.username}</b> (ID: {provider.userId})<br />
+            <div key={`${provider.id}-${provider.skillName}`}>
+              <b>Provider: {provider.username}</b> (ID: {provider.id})<br />
               <b>Skill: {provider.skillName}</b><br />
               Rate: ${provider.rate}/hr<br />
               Experience: {provider.experience} years<br />

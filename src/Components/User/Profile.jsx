@@ -5,6 +5,11 @@ import DeleteUser from "./DeleteUser";
 import MySkills from "../UserSkills/MySkills";
 import AssignSkill from "../UserSkills/AssignSkills";
 import SearchProviders from "../UserSkills/SearchProviders";
+import PlaceOrder from "../Orders/PlaceOrder";
+import MyOrders from "../Orders/MyOrders";
+import ReceivedOrders from "../Orders/RecievedOrder";
+import WalletBalance from "../Payment/WalletBalance";
+import AddFunds from "../Payment/AddFunds";
 
 export default function Profile({ onLogout }) {
 
@@ -45,7 +50,8 @@ export default function Profile({ onLogout }) {
       <div>
         <button onClick={() => setActiveTab("profile")}>Profile</button>
         <button onClick={() => setActiveTab("wallet")}>Wallet</button>
-        <button onClick={() => setActiveTab("trust")}>Trust Score</button>
+        {/* Trust score functionality disabled - backend endpoint not available */}
+        {/* <button onClick={() => setActiveTab("trust")}>Trust Score</button> */}
 
         {isProvider && (
           <>
@@ -87,7 +93,8 @@ export default function Profile({ onLogout }) {
         </>
       )}
 
-      {activeTab === "trust" && <MyTrust />}
+      {/* Trust score functionality disabled - backend endpoint not available */}
+      {/* {activeTab === "trust" && <MyTrust />} */}
 
       {activeTab === "mySkills" && isProvider && <MySkills />}
 
