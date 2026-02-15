@@ -6,6 +6,8 @@ export default function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [message, setMessage] = useState("");
   const [authorizingOrderId, setAuthorizingOrderId] = useState(null);
+  const [cancellingOrderId, setCancellingOrderId] = useState(null);
+  const [approvingOrderId, setApprovingOrderId] = useState(null);
 
   useEffect(() => {
     loadOrders();
@@ -14,8 +16,9 @@ export default function MyOrders() {
   const loadOrders = async () => {
     try {
       const data = await authFetch("/orders/my-orders");
-      console.log("Orders received:", data); // Debug log
+      console.log("Orders received:", data);
       setOrders(data || []);
+      setMessage("");
     } catch (err) {
       console.error(err);
       setMessage(err.message || "Failed to load orders");
@@ -25,6 +28,7 @@ export default function MyOrders() {
   const handleCancel = async (orderId) => {
     if (!confirm("Cancel this order?")) return;
 
+    setCancellingOrderId(orderId);
     try {
       await authFetch(`/orders/cancel?orderId=${orderId}`, {
         method: "POST"
@@ -33,13 +37,16 @@ export default function MyOrders() {
       loadOrders();
     } catch (err) {
       console.error(err);
-      setMessage(err.message || "Failed to cancel order");
+      setMessage( (err.message || "Failed to cancel order"));
+    } finally {
+      setCancellingOrderId(null);
     }
   };
 
   const handleApprove = async (orderId) => {
     if (!confirm("Approve delivery and release payment?")) return;
 
+    setApprovingOrderId(orderId);
     try {
       await authFetch(`/orders/approve-delivery?orderId=${orderId}`, {
         method: "POST"
@@ -48,7 +55,9 @@ export default function MyOrders() {
       loadOrders();
     } catch (err) {
       console.error(err);
-      setMessage(err.message || "Failed to approve delivery");
+      setMessage( (err.message || "Failed to approve delivery"));
+    } finally {
+      setApprovingOrderId(null);
     }
   };
 
@@ -80,7 +89,7 @@ export default function MyOrders() {
           {/* PENDING - Need to authorize payment */}
           {order.status === "PENDING" && (!order.mockPaymentStatus || order.mockPaymentStatus === "PENDING") && (
             <div>
-              <p>⚠️ <b>Action Required:</b> Authorize payment so provider can accept order</p>
+              <p> <b>Action Required:</b> Authorize payment so provider can accept order</p>
               {authorizingOrderId === order.orderId ? (
                 <AuthorizePayment
                   orderId={order.orderId}
@@ -93,10 +102,13 @@ export default function MyOrders() {
               ) : (
                 <>
                   <button onClick={() => setAuthorizingOrderId(order.orderId)}>
-                    🔒 Authorize Payment
+                     Authorize Payment
                   </button>
-                  <button onClick={() => handleCancel(order.orderId)}>
-                    ❌ Cancel Order
+                  <button 
+                    onClick={() => handleCancel(order.orderId)}
+                    disabled={cancellingOrderId === order.orderId}
+                  >
+                    {cancellingOrderId === order.orderId ? "⏳ Cancelling..." : "❌ Cancel Order"}
                   </button>
                 </>
               )}
@@ -105,37 +117,40 @@ export default function MyOrders() {
 
           {/* PENDING but payment authorized - waiting for provider */}
           {order.status === "PENDING" && order.mockPaymentStatus === "AUTHORIZED" && (
-            <p>✅ Payment authorized. Waiting for provider to accept...</p>
+            <p>Payment authorized. Waiting for provider to accept...</p>
           )}
 
           {/* ACCEPTED - Provider accepted */}
           {order.status === "ACCEPTED" && (
-            <p>✅ Provider accepted. Work will start soon...</p>
+            <p>Provider accepted. Work will start soon...</p>
           )}
 
           {/* IN_PROGRESS - Provider working */}
           {order.status === "IN_PROGRESS" && (
-            <p>⏳ Provider is working on your order...</p>
+            <p>Provider is working on your order...</p>
           )}
 
           {/* DELIVERED - Need to approve */}
           {order.status === "DELIVERED" && (
             <div>
-              <p>✅ <b>Work delivered!</b> Please review and approve to release payment.</p>
-              <button onClick={() => handleApprove(order.orderId)}>
-                ✅ Approve & Release Payment
+              <p><b>Work delivered!</b> Please review and approve to release payment.</p>
+              <button 
+                onClick={() => handleApprove(order.orderId)}
+                disabled={approvingOrderId === order.orderId}
+              >
+                {approvingOrderId === order.orderId ? "⏳ Approving..." : "✅ Approve & Release Payment"}
               </button>
             </div>
           )}
 
           {/* COMPLETED - Done */}
           {order.status === "COMPLETED" && (
-            <p>✅ Order completed. Payment released to provider.</p>
+            <p>Order completed. Payment released to provider.</p>
           )}
 
           {/* CANCELLED - Cancelled */}
           {order.status === "CANCELLED" && (
-            <p>❌ Order cancelled.</p>
+            <p>Order cancelled.</p>
           )}
 
           <hr />

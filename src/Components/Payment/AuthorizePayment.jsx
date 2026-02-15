@@ -5,6 +5,7 @@ export default function AuthorizePayment({ orderId, amount, onAuthorized }) {
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [authorized, setAuthorized] = useState(false);
 
   const handleAuthorize = async () => {
     if (!confirm(`Authorize payment of $${amount}? This will lock funds in your wallet.`)) {
@@ -24,6 +25,7 @@ export default function AuthorizePayment({ orderId, amount, onAuthorized }) {
       });
 
       setMessage(`Payment authorized! Remaining balance: $${data.walletBalance}`);
+      setAuthorized(true);
       setLoading(false);
       
       setTimeout(() => {
@@ -32,14 +34,24 @@ export default function AuthorizePayment({ orderId, amount, onAuthorized }) {
       
     } catch (err) {
       console.error(err);
-      setMessage(err.message || "Failed to authorize payment");
+      setMessage( (err.message || "Failed to authorize payment"));
       setLoading(false);
     }
   };
 
+  if (authorized) {
+    return (
+      <div>
+        <h4>Payment Authorized!</h4>
+        <p>{message}</p>
+        <p><small>Redirecting you back...</small></p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <h4>Authorization Required</h4>
+      <h4>💳 Authorization Required</h4>
       <p>Amount: <b>${amount}</b></p>
       <p>This will lock funds in escrow until work is delivered.</p>
       <p><small>Provider cannot accept order until you authorize payment.</small></p>
@@ -48,10 +60,10 @@ export default function AuthorizePayment({ orderId, amount, onAuthorized }) {
         onClick={handleAuthorize} 
         disabled={loading}
       >
-        {loading ? "Authorizing..." : "Authorize Payment"}
+        {loading ? "⏳ Authorizing..." : "🔒 Authorize Payment"}
       </button>
 
-      {message && <p>{message}</p>}
+      {message && !authorized && <p>{message}</p>}
     </div>
   );
 }
