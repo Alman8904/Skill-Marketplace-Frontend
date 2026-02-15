@@ -4,6 +4,7 @@ import UpdateProfile from "./UpdateProfile";
 import DeleteUser from "./DeleteUser";
 import MySkills from "../UserSkills/MySkills";
 import AssignSkill from "../UserSkills/AssignSkills";
+import SearchProviders from "../UserSkills/SearchProviders";
 
 export default function Profile({ onLogout }) {
 
