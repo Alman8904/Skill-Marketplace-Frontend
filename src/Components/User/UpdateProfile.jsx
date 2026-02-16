@@ -52,51 +52,45 @@ export default function UpdateProfile({ onUpdated }) {
   };
 
   return (
-    <div>
-      <h3>Update Profile</h3>
-
-      <form onSubmit={handleSubmit}>
-        <input
-          name="firstName"
-          placeholder="First Name"
-          value={form.firstName}
-          onChange={handleChange}
-        />
-        <br />
-
-        <input
-          name="lastName"
-          placeholder="Last Name"
-          value={form.lastName}
-          onChange={handleChange}
-        />
-        <br />
-
-        <input
-          name="password"
-          type="password"
-          placeholder="New Password (min 8 characters)"
-          value={form.password}
-          onChange={handleChange}
-        />
-        <br />
-
-        <select
-          name="userType"
-          value={form.userType}
-          onChange={handleChange}
-        >
-          <option value="">Keep Current User Type</option>
-          <option value="PROVIDER">PROVIDER</option>
-          <option value="CONSUMER">CONSUMER</option>
-        </select>
-        <br /><br />
-
-        <button type="submit">Update</button>
-      </form>
-
-      <p>{message}</p>
-      <p><small>Leave fields empty to keep current values</small></p>
-    </div>
+    <div className="card">
+    <h3>Update Profile</h3>
+    <form onSubmit={handleSubmit}>
+      <input
+        name="firstName"
+        placeholder="First Name"
+        value={form.firstName}
+        onChange={handleChange}
+      />
+      <br /><br />
+      <input
+        name="lastName"
+        placeholder="Last Name"
+        value={form.lastName}
+        onChange={handleChange}
+      />
+      <br /><br />
+      <input
+        name="password"
+        type="password"
+        placeholder="New Password (min 8 characters)"
+        value={form.password}
+        onChange={handleChange}
+      />
+      <br /><br />
+      <select
+        name="userType"
+        value={form.userType}
+        onChange={handleChange}
+      >
+        <option value="">Keep Current User Type</option>
+        <option value="PROVIDER">PROVIDER</option>
+        <option value="CONSUMER">CONSUMER</option>
+      </select>
+      <br /><br />
+      <button type="submit" className="btn-primary">Update</button>
+    </form>
+    {message && <p className="message message-success mt-md">{message}</p>}
+    <p className="text-muted mt-sm"><small>Leave fields empty to keep current values</small></p>
+  </div>
   );
 }

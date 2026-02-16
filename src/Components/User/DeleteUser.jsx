@@ -23,10 +23,11 @@ export default function DeleteUser({ onDeleted }) {
   };
 
   return (
-    <div>
-      <h3>Delete Account</h3>
-      <button onClick={handleDelete}>Delete My Account</button>
-      <p>{message}</p>
-    </div>
+  <div className="card">
+    <h3 className="text-error">Delete Account</h3>
+    <p className="text-warning">This action cannot be undone!</p>
+    <button onClick={handleDelete} className="btn-danger">Delete My Account</button>
+    {message && <p className="message message-error mt-md">{message}</p>}
+  </div>
   );
 }

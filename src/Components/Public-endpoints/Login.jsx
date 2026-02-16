@@ -46,29 +46,25 @@ export default function Login({ onLoginSuccess }) {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-
-      <form onSubmit={handleSubmit}>
+    <div className="card">
+      <h2 className="mb-lg">Welcome Back</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-md">
         <input
           name="username"
           placeholder="Username"
           onChange={handleChange}
+          className="w-full"
         />
-        <br />
-
         <input
           name="password"
           type="password"
           placeholder="Password"
           onChange={handleChange}
+          className="w-full"
         />
-        <br /><br />
-
-        <button type="submit">Login</button>
+        <button type="submit" className="btn-primary mt-sm">Login</button>
       </form>
-
-      <p>{message}</p>
+      {message && <p className="message message-error mt-md">{message}</p>}
     </div>
   );
 }

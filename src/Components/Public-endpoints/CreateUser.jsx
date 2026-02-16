@@ -52,19 +52,17 @@ export default function CreateUser() {
   };
 
   return (
-    <div>
-      <h2>Create Account</h2>
-
-      <form onSubmit={handleSubmit}>
+    <div className="card">
+      <h2 className="mb-lg">Create Account</h2>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-md">
         <input
           name="username"
           placeholder="Username"
           value={form.username}
           onChange={handleChange}
           required
+          className="w-full"
         />
-        <br />
-
         <input
           name="password"
           type="password"
@@ -72,41 +70,43 @@ export default function CreateUser() {
           value={form.password}
           onChange={handleChange}
           required
+          className="w-full"
         />
-        <br />
-
-        <input
-          name="firstName"
-          placeholder="First Name"
-          value={form.firstName}
-          onChange={handleChange}
-          required
-        />
-        <br />
-
-        <input
-          name="lastName"
-          placeholder="Last Name"
-          value={form.lastName}
-          onChange={handleChange}
-          required
-        />
-        <br />
-
+        <div className="grid grid-cols-2 gap-md">
+          <input
+            name="firstName"
+            placeholder="First Name"
+            value={form.firstName}
+            onChange={handleChange}
+            required
+            className="w-full"
+          />
+          <input
+            name="lastName"
+            placeholder="Last Name"
+            value={form.lastName}
+            onChange={handleChange}
+            required
+            className="w-full"
+          />
+        </div>
         <select
           name="userType"
           value={form.userType}
           onChange={handleChange}
+          className="w-full"
         >
           <option value="CONSUMER">Consumer</option>
           <option value="PROVIDER">Provider</option>
         </select>
-        <br /><br />
 
-        <button type="submit">Create Account</button>
+        <button type="submit" className="btn-primary mt-sm">Create Account</button>
       </form>
-
-      <p>{message}</p>
+      {message && (
+        <p className={message.includes('success') ? 'message message-success mt-md' : 'message message-error mt-md'}>
+          {message}
+        </p>
+      )}
     </div>
   );
 }

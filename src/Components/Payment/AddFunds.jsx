@@ -31,22 +31,22 @@ export default function AddFunds({ onFundsAdded }) {
   };
 
   return (
-    <div>
-      <h3>Add Funds to Wallet</h3>
+    <div className="card">
+      <h2>Add Funds to Wallet</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex gap-sm items-center">
         <input
           type="number"
           placeholder="Amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           required
+          style={{ maxWidth: "200px" }}
         />
-        <br />
-        <button type="submit">Add Funds</button>
+        <button type="submit" className="btn-primary ml-sm">Add Funds</button>
       </form>
 
-      <p>{message}</p>
+      {message && <p className="message message-success mt-md">{message}</p>}
     </div>
   );
 }

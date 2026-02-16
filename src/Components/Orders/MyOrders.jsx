@@ -37,7 +37,7 @@ export default function MyOrders() {
       loadOrders();
     } catch (err) {
       console.error(err);
-      setMessage( (err.message || "Failed to cancel order"));
+      setMessage((err.message || "Failed to cancel order"));
     } finally {
       setCancellingOrderId(null);
     }
@@ -55,7 +55,7 @@ export default function MyOrders() {
       loadOrders();
     } catch (err) {
       console.error(err);
-      setMessage( (err.message || "Failed to approve delivery"));
+      setMessage((err.message || "Failed to approve delivery"));
     } finally {
       setApprovingOrderId(null);
     }
@@ -66,30 +66,30 @@ export default function MyOrders() {
   }
 
   return (
-    <div>
-      <h3>My Orders (Consumer)</h3>
+    <div className="card">
+      <h2>My Orders (Consumer)</h2>
 
       {orders.map((order) => (
-        <div key={order.orderId}>
-          <b>Order #{order.orderId}</b><br />
-          Provider: {order.providerUsername}<br />
-          Skill: {order.skillName}<br />
-          Price: ${order.agreedPrice}<br />
-          Status: {order.status}<br />
-          {order.mockPaymentStatus && <>Payment Status: {order.mockPaymentStatus}<br /></>}
-          Description: {order.description}<br />
-          
+        <div key={order.orderId} className="order-card mb-md">
+          <p><b>Order #{order.orderId}</b> <span className={`status-badge status-${order.status.toLowerCase().replace('_', '-')}`}>{order.status}</span></p>
+          <p>Provider: {order.providerUsername}</p>
+          <p>Skill: {order.skillName}</p>
+          <p>Price: ${order.agreedPrice}</p>
+
+          {order.mockPaymentStatus && <p>Payment Status: <span className="status-badge status-pending">{order.mockPaymentStatus}</span></p>}
+          <p>Description: {order.description}</p>
+
           {order.deliveryNotes && (
-            <>Delivery Notes: {order.deliveryNotes}<br /></>
+            <p>Delivery Notes: {order.deliveryNotes}</p>
           )}
           {order.deliveryUrl && (
-            <>Delivery URL: <a href={order.deliveryUrl} target="_blank" rel="noopener noreferrer">{order.deliveryUrl}</a><br /></>
+            <p>Delivery URL: <a href={order.deliveryUrl} target="_blank" rel="noopener noreferrer">{order.deliveryUrl}</a></p>
           )}
 
           {/* PENDING - Need to authorize payment */}
           {order.status === "PENDING" && (!order.mockPaymentStatus || order.mockPaymentStatus === "PENDING") && (
-            <div>
-              <p> <b>Action Required:</b> Authorize payment so provider can accept order</p>
+            <div className="mt-sm">
+              <p className="message message-warning"> <b>Action Required:</b> Authorize payment so provider can accept order</p>
               {authorizingOrderId === order.orderId ? (
                 <AuthorizePayment
                   orderId={order.orderId}
@@ -100,64 +100,64 @@ export default function MyOrders() {
                   }}
                 />
               ) : (
-                <>
-                  <button onClick={() => setAuthorizingOrderId(order.orderId)}>
-                     Authorize Payment
+                <div className="flex gap-sm">
+                  <button className="btn-primary" onClick={() => setAuthorizingOrderId(order.orderId)}>
+                    Authorize Payment
                   </button>
-                  <button 
+                  <button
+                    className="btn-danger ml-sm"
                     onClick={() => handleCancel(order.orderId)}
                     disabled={cancellingOrderId === order.orderId}
                   >
-                    {cancellingOrderId === order.orderId ? "⏳ Cancelling..." : "❌ Cancel Order"}
+                    {cancellingOrderId === order.orderId ? "Cancelling..." : "Cancel Order"}
                   </button>
-                </>
+                </div>
               )}
             </div>
           )}
 
           {/* PENDING but payment authorized - waiting for provider */}
           {order.status === "PENDING" && order.mockPaymentStatus === "AUTHORIZED" && (
-            <p>Payment authorized. Waiting for provider to accept...</p>
+            <p className="message message-info">Payment authorized. Waiting for provider to accept...</p>
           )}
 
           {/* ACCEPTED - Provider accepted */}
           {order.status === "ACCEPTED" && (
-            <p>Provider accepted. Work will start soon...</p>
+            <p className="message message-success">Provider accepted. Work will start soon...</p>
           )}
 
           {/* IN_PROGRESS - Provider working */}
           {order.status === "IN_PROGRESS" && (
-            <p>Provider is working on your order...</p>
+            <p className="message message-info">Provider is working on your order...</p>
           )}
 
           {/* DELIVERED - Need to approve */}
           {order.status === "DELIVERED" && (
-            <div>
-              <p><b>Work delivered!</b> Please review and approve to release payment.</p>
-              <button 
+            <div className="mt-sm">
+              <p className="message message-success"><b>Work delivered!</b> Please review and approve to release payment.</p>
+              <button
+                className="btn-success"
                 onClick={() => handleApprove(order.orderId)}
                 disabled={approvingOrderId === order.orderId}
               >
-                {approvingOrderId === order.orderId ? "⏳ Approving..." : "✅ Approve & Release Payment"}
+                {approvingOrderId === order.orderId ? "Approving..." : "Approve & Release Payment"}
               </button>
             </div>
           )}
 
           {/* COMPLETED - Done */}
           {order.status === "COMPLETED" && (
-            <p>Order completed. Payment released to provider.</p>
+            <p className="message message-success">Order completed. Payment released to provider.</p>
           )}
 
           {/* CANCELLED - Cancelled */}
           {order.status === "CANCELLED" && (
-            <p>Order cancelled.</p>
+            <p className="message message-error">Order cancelled.</p>
           )}
-
-          <hr />
         </div>
       ))}
 
-      {message && <p>{message}</p>}
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }

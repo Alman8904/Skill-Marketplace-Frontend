@@ -27,14 +27,14 @@ export default function AuthorizePayment({ orderId, amount, onAuthorized }) {
       setMessage(`Payment authorized! Remaining balance: $${data.walletBalance}`);
       setAuthorized(true);
       setLoading(false);
-      
+
       setTimeout(() => {
         if (onAuthorized) onAuthorized();
       }, 1500);
-      
+
     } catch (err) {
       console.error(err);
-      setMessage( (err.message || "Failed to authorize payment"));
+      setMessage((err.message || "Failed to authorize payment"));
       setLoading(false);
     }
   };
@@ -50,20 +50,21 @@ export default function AuthorizePayment({ orderId, amount, onAuthorized }) {
   }
 
   return (
-    <div>
-      <h4>💳 Authorization Required</h4>
+    <div className="message message-warning">
+      <h4>Authorization Required</h4>
       <p>Amount: <b>${amount}</b></p>
       <p>This will lock funds in escrow until work is delivered.</p>
-      <p><small>Provider cannot accept order until you authorize payment.</small></p>
-      
-      <button 
-        onClick={handleAuthorize} 
+      <p className="text-muted"><small>Provider cannot accept order until you authorize payment.</small></p>
+
+      <button
+        className="btn-primary mt-sm"
+        onClick={handleAuthorize}
         disabled={loading}
       >
-        {loading ? "⏳ Authorizing..." : "🔒 Authorize Payment"}
+        {loading ? "Authorizing..." : "Authorize Payment"}
       </button>
 
-      {message && !authorized && <p>{message}</p>}
+      {message && !authorized && <p className="text-error mt-sm">{message}</p>}
     </div>
   );
 }

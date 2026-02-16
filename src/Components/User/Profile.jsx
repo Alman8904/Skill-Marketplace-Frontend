@@ -42,78 +42,123 @@ export default function Profile({ onLogout }) {
 
   return (
     <div>
-      <h2>Welcome, {user.firstName} {user.lastName}!</h2>
-      <p>Username: {user.username}</p>
-      <p>User Type: {user.userType}</p>
+      <div className="card">
+        <h2>Welcome, {user.firstName} {user.lastName}!</h2>
+        <p className="text-muted">Username: {user.username}</p>
+        <p className="text-muted">User Type: <span className="status-badge status-accepted">{user.userType}</span></p>
+        <button onClick={onLogout} className="btn-danger btn-sm">Logout</button>
+      </div>
 
-      <button onClick={onLogout}>Logout</button>
-      <hr />
-
-      <div>
-        <button onClick={() => setActiveTab("profile")}>Profile</button>
-        <button onClick={() => setActiveTab("wallet")}>Wallet</button>
-        <button onClick={() => setActiveTab("trust")}>Trust Score</button>
-        <button onClick={() => setActiveTab("checkTrust")}>Check Trust</button>
+      <div className="nav-tabs">
+        <button
+          className={activeTab === "profile" ? "active" : ""}
+          onClick={() => setActiveTab("profile")}
+        >
+          Profile
+        </button>
+        <button
+          className={activeTab === "wallet" ? "active" : ""}
+          onClick={() => setActiveTab("wallet")}
+        >
+          Wallet
+        </button>
+        <button
+          className={activeTab === "trust" ? "active" : ""}
+          onClick={() => setActiveTab("trust")}
+        >
+          Trust Score
+        </button>
+        <button
+          className={activeTab === "checkTrust" ? "active" : ""}
+          onClick={() => setActiveTab("checkTrust")}
+        >
+          Check Trust
+        </button>
 
         {isProvider && (
           <>
-            <button onClick={() => setActiveTab("mySkills")}>My Skills</button>
-            <button onClick={() => setActiveTab("assignSkill")}>Assign Skill</button>
-            <button onClick={() => setActiveTab("receivedOrders")}>Received Orders</button>
+            <button
+              className={activeTab === "mySkills" ? "active" : ""}
+              onClick={() => setActiveTab("mySkills")}
+            >
+              My Skills
+            </button>
+            <button
+              className={activeTab === "assignSkill" ? "active" : ""}
+              onClick={() => setActiveTab("assignSkill")}
+            >
+              Assign Skill
+            </button>
+            <button
+              className={activeTab === "receivedOrders" ? "active" : ""}
+              onClick={() => setActiveTab("receivedOrders")}
+            >
+              Received Orders
+            </button>
           </>
         )}
 
         {isConsumer && (
           <>
-            <button onClick={() => setActiveTab("search")}>Search Providers</button>
-            <button onClick={() => setActiveTab("placeOrder")}>Place Order</button>
-            <button onClick={() => setActiveTab("myOrders")}>My Orders</button>
+            <button
+              className={activeTab === "search" ? "active" : ""}
+              onClick={() => setActiveTab("search")}
+            >
+              Search Providers
+            </button>
+            <button
+              className={activeTab === "placeOrder" ? "active" : ""}
+              onClick={() => setActiveTab("placeOrder")}
+            >
+              Place Order
+            </button>
+            <button
+              className={activeTab === "myOrders" ? "active" : ""}
+              onClick={() => setActiveTab("myOrders")}
+            >
+              My Orders
+            </button>
           </>
         )}
       </div>
-      <hr />
 
-      {activeTab === "profile" && (
-        <>
-          <h3>Profile Details</h3>
-          <p>First Name: {user.firstName}</p>
-          <p>Last Name: {user.lastName}</p>
-          <p>Username: {user.username}</p>
-          <p>User Type: {user.userType}</p>
-          <br />
-          <UpdateProfile onUpdated={loadProfile} />
-          <hr />
-          <DeleteUser onDeleted={onLogout} />
-        </>
-      )}
+      {/* Tab Content */}
+      <div className="tab-content mt-md">
+        {activeTab === "profile" && (
+          <div className="flex flex-col gap-lg">
+            <UpdateProfile onUpdated={loadProfile} />
+            <DeleteUser onDeleted={onLogout} />
+          </div>
+        )}
 
-      {activeTab === "wallet" && (
-        <>
-          <WalletBalance key={Math.random()} />
-          <hr />
-          <AddFunds onFundsAdded={() => setActiveTab("wallet")} />
-        </>
-      )}
+        {activeTab === "wallet" && (
+          <div className="flex flex-col gap-lg">
+            <WalletBalance />
+            <AddFunds onFundsAdded={() => {
+              // Optionally reload balance or other profile data
+              loadProfile();
+            }} />
+          </div>
+        )}
 
-      {activeTab === "trust" && <MyTrust />}
+        {activeTab === "trust" && <MyTrust />}
 
-      {activeTab === "checkTrust" && <PublicTrust />}
+        {activeTab === "checkTrust" && <PublicTrust />}
 
-      {activeTab === "mySkills" && isProvider && <MySkills />}
+        {/* Provider Tabs */}
+        {isProvider && activeTab === "mySkills" && <MySkills />}
+        {isProvider && activeTab === "assignSkill" && (
+          <AssignSkill onUpdated={() => setActiveTab("mySkills")} />
+        )}
+        {isProvider && activeTab === "receivedOrders" && <ReceivedOrders />}
 
-      {activeTab === "assignSkill" && isProvider && (
-        <AssignSkill onUpdated={() => setActiveTab("mySkills")} />
-      )}
-
-      {activeTab === "receivedOrders" && isProvider && <ReceivedOrders />}
-
-      {activeTab === "search" && isConsumer && <SearchProviders />}
-
-      {activeTab === "placeOrder" && isConsumer && (
-        <PlaceOrder onOrderPlaced={() => setActiveTab("myOrders")} />
-      )}
-
-      {activeTab === "myOrders" && isConsumer && <MyOrders />}
+        {/* Consumer Tabs */}
+        {isConsumer && activeTab === "search" && <SearchProviders />}
+        {isConsumer && activeTab === "placeOrder" && (
+          <PlaceOrder onOrderPlaced={() => setActiveTab("myOrders")} />
+        )}
+        {isConsumer && activeTab === "myOrders" && <MyOrders />}
+      </div>
     </div>
   );
 }

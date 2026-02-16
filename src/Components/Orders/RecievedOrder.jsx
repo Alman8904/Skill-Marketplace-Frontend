@@ -90,42 +90,43 @@ export default function ReceivedOrders() {
   }
 
   return (
-    <div>
-      <h3>Received Orders (Provider)</h3>
+    <div className="card">
+      <h2>Received Orders (Provider)</h2>
 
       {orders.map((order) => (
-        <div key={order.orderId}>
-          <b>Order #{order.orderId}</b><br />
-          Consumer: {order.consumerUsername}<br />
-          Skill: {order.skillName}<br />
-          Price: ${order.agreedPrice}<br />
-          Status: {order.status}<br />
-          Description: {order.description}<br />
+        <div key={order.orderId} className="order-card mb-md">
+          <p><b>Order #{order.orderId}</b> <span className={`status-badge status-${order.status.toLowerCase().replace('_', '-')}`}>{order.status}</span></p>
+          <p>Consumer: {order.consumerUsername}</p>
+          <p>Skill: {order.skillName}</p>
+          <p>Price: ${order.agreedPrice}</p>
+          <p>Description: {order.description}</p>
 
           {order.status === "PENDING" && (
-            <>
+            <div className="mt-sm">
               {acceptingOrderId === order.orderId ? (
                 <>
                   <input
                     type="datetime-local"
                     value={deadline}
                     onChange={(e) => setDeadline(e.target.value)}
+                    className="mb-sm"
                   />
-                  <button onClick={() => handleAccept(order.orderId)}>Confirm Accept</button>
-                  <button onClick={() => setAcceptingOrderId(null)}>Cancel</button>
+                  <br />
+                  <button className="btn-primary" onClick={() => handleAccept(order.orderId)}>Confirm Accept</button>
+                  <button className="btn-secondary ml-sm" onClick={() => setAcceptingOrderId(null)}>Cancel</button>
                 </>
               ) : (
-                <button onClick={() => setAcceptingOrderId(order.orderId)}>Accept Order</button>
+                <button className="btn-primary" onClick={() => setAcceptingOrderId(order.orderId)}>Accept Order</button>
               )}
-            </>
+            </div>
           )}
 
           {order.status === "ACCEPTED" && (
-            <button onClick={() => handleStartWork(order.orderId)}>Start Work</button>
+            <button className="btn-primary mt-sm" onClick={() => handleStartWork(order.orderId)}>Start Work</button>
           )}
 
           {order.status === "IN_PROGRESS" && (
-            <>
+            <div className="mt-sm">
               {deliveringOrderId === order.orderId ? (
                 <>
                   <textarea
@@ -143,30 +144,29 @@ export default function ReceivedOrders() {
                     onChange={(e) =>
                       setDeliveryForm({ ...deliveryForm, deliveryUrl: e.target.value })
                     }
+                    className="mt-sm"
                   />
                   <br />
-                  <button onClick={() => handleDeliver(order.orderId)}>Submit Delivery</button>
-                  <button onClick={() => setDeliveringOrderId(null)}>Cancel</button>
+                  <button className="btn-success mt-sm" onClick={() => handleDeliver(order.orderId)}>Submit Delivery</button>
+                  <button className="btn-secondary mt-sm ml-sm" onClick={() => setDeliveringOrderId(null)}>Cancel</button>
                 </>
               ) : (
-                <button onClick={() => setDeliveringOrderId(order.orderId)}>Deliver Work</button>
+                <button className="btn-success" onClick={() => setDeliveringOrderId(order.orderId)}>Deliver Work</button>
               )}
-            </>
+            </div>
           )}
 
           {order.status === "DELIVERED" && (
-            <p><i>Waiting for consumer to approve delivery</i></p>
+            <p className="message message-info"><i>Waiting for consumer to approve delivery</i></p>
           )}
 
           {order.status === "COMPLETED" && (
-            <p><i>✅ Order completed</i></p>
+            <p className="message message-success"><i>Order completed</i></p>
           )}
-
-          <hr />
         </div>
       ))}
 
-      {message && <p>{message}</p>}
+      {message && <p className="message">{message}</p>}
     </div>
   );
 }

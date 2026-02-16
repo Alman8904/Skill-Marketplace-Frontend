@@ -37,11 +37,11 @@ export default function PublicTrust() {
   };
 
   return (
-    <div>
+    <div className="card">
       <h3>Check Trust Score</h3>
 
-      <form onSubmit={loadTrust}>
-        <div>
+      <form onSubmit={loadTrust} className="mb-lg">
+        <div className="flex gap-sm items-center mb-sm">
           <input
             type="text"
             placeholder="Enter username"
@@ -50,8 +50,8 @@ export default function PublicTrust() {
           />
         </div>
 
-        <div>
-          <label>
+        <div className="flex gap-md mb-md">
+          <label className="flex items-center gap-xs cursor-pointer">
             <input
               type="radio"
               value="provider"
@@ -61,7 +61,7 @@ export default function PublicTrust() {
             Provider
           </label>
 
-          <label>
+          <label className="flex items-center gap-xs cursor-pointer">
             <input
               type="radio"
               value="consumer"
@@ -72,31 +72,33 @@ export default function PublicTrust() {
           </label>
         </div>
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className="btn-primary">
           {loading ? "Loading..." : "Check Trust Score"}
         </button>
       </form>
 
-      {message && <p>{message}</p>}
+      {message && <p className="message message-error">{message}</p>}
 
       {trust && (
-        <div>
-          <div>
-            <p>Badge: {trust.trustBadge}</p>
+        <div className="card bg-hover">
+          <div className="mb-md">
+            <p className="text-xl">Badge: <span className={`status-badge status-${trust.trustBadge === 'TRUSTED' ? 'completed' : trust.trustBadge === 'RISKY' ? 'cancelled' : 'in-progress'}`}>{trust.trustBadge}</span></p>
           </div>
 
           <div>
-            <h4>Trust Score for: {username}</h4>
-            <p>Completed Jobs: {trust.completedJobs}</p>
-            <p>Cancelled Jobs: {trust.cancelledJobs}</p>
-            <p>Refunds: {trust.refundCount}</p>
-            <p>
-              Completion Rate: {trust.completionRate?.toFixed(1)}%
-            </p>
+            <h4>Trust Score for: <span className="text-primary">{username}</span></h4>
+            <div className="grid grid-cols-2 gap-sm mt-sm">
+              <p>Completed Jobs: <b>{trust.completedJobs}</b></p>
+              <p>Cancelled Jobs: <b>{trust.cancelledJobs}</b></p>
+              <p>Refunds: <b>{trust.refundCount}</b></p>
+              <p>
+                Completion Rate: <b>{trust.completionRate?.toFixed(1)}%</b>
+              </p>
+            </div>
           </div>
 
-          <div>
-            <p>
+          <div className="mt-md">
+            <p className="text-muted">
               {trust.trustBadge === "TRUSTED" &&
                 "Highly Trusted User"}
               {trust.trustBadge === "NEUTRAL" &&

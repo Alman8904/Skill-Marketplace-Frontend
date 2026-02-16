@@ -72,65 +72,67 @@ export default function AssignSkill({ onUpdated }) {
   };
 
   return (
-    <div>
+    <div className="card">
       <h3>Assign Skill</h3>
 
       <form onSubmit={handleSubmit}>
-        <select
-          name="skillId"
-          value={form.skillId}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Skill</option>
-          {skills.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.skillName}
-            </option>
-          ))}
-        </select>
-        <br />
+        <div className="grid grid-cols-2 gap-md">
+          <select
+            name="skillId"
+            value={form.skillId}
+            onChange={handleChange}
+            required
+            className="w-full"
+          >
+            <option value="">Select Skill</option>
+            {skills.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.skillName}
+              </option>
+            ))}
+          </select>
 
-        <input
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-        />
-        <br />
+          <input
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            className="w-full"
+          />
 
-        <input
-          name="rate"
-          type="number"
-          placeholder="Rate"
-          value={form.rate}
-          onChange={handleChange}
-        />
-        <br />
+          <input
+            name="rate"
+            type="number"
+            placeholder="Rate ($/hr)"
+            value={form.rate}
+            onChange={handleChange}
+            className="w-full"
+          />
 
-        <input
-          name="experience"
-          type="number"
-          placeholder="Experience (years)"
-          value={form.experience}
-          onChange={handleChange}
-        />
-        <br />
+          <input
+            name="experience"
+            type="number"
+            placeholder="Experience (years)"
+            value={form.experience}
+            onChange={handleChange}
+            className="w-full"
+          />
 
-        <select
-          name="serviceMode"
-          value={form.serviceMode}
-          onChange={handleChange}
-        >
-          <option value="REMOTE">REMOTE</option>
-          <option value="LOCAL">LOCAL</option>
-        </select>
-        <br /><br />
+          <select
+            name="serviceMode"
+            value={form.serviceMode}
+            onChange={handleChange}
+            className="w-full"
+          >
+            <option value="REMOTE">REMOTE</option>
+            <option value="LOCAL">LOCAL</option>
+          </select>
+        </div>
 
-        <button type="submit">Assign Skill</button>
+        <button type="submit" className="btn-primary mt-md">Assign Skill</button>
       </form>
 
-      <p>{message}</p>
+      {message && <p className="message message-success mt-md">{message}</p>}
     </div>
   );
 }

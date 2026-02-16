@@ -63,8 +63,8 @@ export default function PlaceOrder({ onOrderPlaced }) {
   };
 
   return (
-    <div>
-      <h3>Place Order</h3>
+    <div className="card">
+      <h2>Place Order</h2>
 
       <form onSubmit={handleSubmit}>
         <input
@@ -75,7 +75,7 @@ export default function PlaceOrder({ onOrderPlaced }) {
           onChange={handleChange}
           required
         />
-        <br />
+        <br /><br />
 
         <select
           name="skillId"
@@ -90,7 +90,7 @@ export default function PlaceOrder({ onOrderPlaced }) {
             </option>
           ))}
         </select>
-        <br />
+        <br /><br />
 
         <textarea
           name="description"
@@ -100,7 +100,7 @@ export default function PlaceOrder({ onOrderPlaced }) {
           rows={4}
           required
         />
-        <br />
+        <br /><br />
 
         <input
           name="estimatedHours"
@@ -112,10 +112,10 @@ export default function PlaceOrder({ onOrderPlaced }) {
         />
         <br /><br />
 
-        <button type="submit">Place Order</button>
+        <button type="submit" className="btn-primary">Place Order</button>
       </form>
 
-      <p>{message}</p>
+      {message && <p className="message message-success mt-md">{message}</p>}
     </div>
   );
 }

@@ -21,10 +21,10 @@ export default function WalletBalance() {
   };
 
   return (
-    <div>
+    <div className="card">
       <h3>Wallet Balance</h3>
       {balance !== null ? (
-        <p>Current Balance: <b>${balance.walletBalance}</b></p>
+        <p className="text-xl">Current Balance: <b className="text-success">${balance.walletBalance}</b></p>
       ) : (
         <p>{message || "Loading..."}</p>
       )}

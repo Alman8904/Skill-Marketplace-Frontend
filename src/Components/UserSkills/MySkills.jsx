@@ -55,24 +55,30 @@ export default function MySkills() {
   }
 
   return (
-    <div>
+    <div className="card">
       <h3>My Skills</h3>
 
       {skills.map((s) => (
-        <div key={s.userSkillId}>
-          <b>{s.skillName}</b><br />
-          Description: {s.description}<br />
-          Rate: ${s.rate}/hr<br />
-          Experience: {s.experience} years<br />
-          Mode: {s.serviceMode}<br />
-
-          <button onClick={() => setEditingSkill(s)}>Edit</button>
-          <button onClick={() => handleDeactivate(s.userSkillId)}>Deactivate</button>
-          <hr />
+        <div key={s.userSkillId} className="card bg-hover mb-md">
+          <div className="flex justify-between items-start">
+            <div>
+              <h4 className="text-primary">{s.skillName}</h4>
+              <p className="text-muted text-sm">{s.description}</p>
+              <div className="flex gap-md mt-sm text-sm">
+                <p>Rate: <b>${s.rate}/hr</b></p>
+                <p>Experience: <b>{s.experience} years</b></p>
+                <p>Mode: <span className="status-badge status-accepted">{s.serviceMode}</span></p>
+              </div>
+            </div>
+            <div className="flex gap-sm">
+              <button className="btn-secondary btn-sm" onClick={() => setEditingSkill(s)}>Edit</button>
+              <button className="btn-danger btn-sm" onClick={() => handleDeactivate(s.userSkillId)}>Deactivate</button>
+            </div>
+          </div>
         </div>
       ))}
 
-      {message && <p>{message}</p>}
+      {message && <p className="message message-success">{message}</p>}
     </div>
   );
 }

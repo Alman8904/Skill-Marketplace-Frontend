@@ -42,54 +42,56 @@ export default function UpdateUserSkill({ skill, onUpdated, onCancel }) {
   };
 
   return (
-    <div>
+    <div className="card">
       <h3>Update Skill: {skill.skillName}</h3>
 
       <form onSubmit={handleSubmit}>
-        <input
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          required
-        />
-        <br />
+        <div className="grid grid-cols-2 gap-md">
+          <input
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            required
+            className="col-span-2"
+          />
 
-        <input
-          name="rate"
-          type="number"
-          placeholder="Rate"
-          value={form.rate}
-          onChange={handleChange}
-          required
-        />
-        <br />
+          <input
+            name="rate"
+            type="number"
+            placeholder="Rate ($/hr)"
+            value={form.rate}
+            onChange={handleChange}
+            required
+          />
 
-        <input
-          name="experience"
-          type="number"
-          placeholder="Experience (years)"
-          value={form.experience}
-          onChange={handleChange}
-          required
-        />
-        <br />
+          <input
+            name="experience"
+            type="number"
+            placeholder="Experience (years)"
+            value={form.experience}
+            onChange={handleChange}
+            required
+          />
 
-        <select
-          name="serviceMode"
-          value={form.serviceMode}
-          onChange={handleChange}
-        >
-          <option value="REMOTE">REMOTE</option>
-          <option value="LOCAL">LOCAL</option>
-        </select>
-        <br /><br />
+          <select
+            name="serviceMode"
+            value={form.serviceMode}
+            onChange={handleChange}
+            className="col-span-2"
+          >
+            <option value="REMOTE">REMOTE</option>
+            <option value="LOCAL">LOCAL</option>
+          </select>
+        </div>
 
-        <button type="submit">Update</button>
-        <button type="button" onClick={onCancel}>Cancel</button>
+        <div className="mt-md">
+          <button type="submit" className="btn-primary">Update</button>
+          <button type="button" className="btn-secondary ml-sm" onClick={onCancel}>Cancel</button>
+        </div>
       </form>
 
-      {message && <p>{message}</p>}
+      {message && <p className="message message-success mt-md">{message}</p>}
     </div>
   );
 }

@@ -27,7 +27,7 @@ export default function SearchProviders() {
     try {
       const params = new URLSearchParams();
       params.append("skill", searchForm.skill);
-      
+
       if (searchForm.minRate) params.append("minRate", searchForm.minRate);
       if (searchForm.maxRate) params.append("maxRate", searchForm.maxRate);
       if (searchForm.serviceMode) params.append("serviceMode", searchForm.serviceMode);
@@ -43,74 +43,77 @@ export default function SearchProviders() {
   };
 
   return (
-    <div>
+    <div className="card">
       <h3>Search Skill Providers</h3>
 
-      <form onSubmit={handleSearch}>
-        <input
-          name="skill"
-          placeholder="Skill name (required)"
-          value={searchForm.skill}
-          onChange={handleChange}
-          required
-        />
-        <br />
+      <form onSubmit={handleSearch} className="mb-lg">
+        <div className="grid grid-cols-2 gap-md mb-md">
+          <input
+            name="skill"
+            placeholder="Skill name (required)"
+            value={searchForm.skill}
+            onChange={handleChange}
+            required
+            className="col-span-2"
+          />
 
-        <input
-          name="minRate"
-          type="number"
-          placeholder="Min Rate"
-          value={searchForm.minRate}
-          onChange={handleChange}
-        />
-        <br />
+          <input
+            name="minRate"
+            type="number"
+            placeholder="Min Rate"
+            value={searchForm.minRate}
+            onChange={handleChange}
+          />
 
-        <input
-          name="maxRate"
-          type="number"
-          placeholder="Max Rate"
-          value={searchForm.maxRate}
-          onChange={handleChange}
-        />
-        <br />
+          <input
+            name="maxRate"
+            type="number"
+            placeholder="Max Rate"
+            value={searchForm.maxRate}
+            onChange={handleChange}
+          />
 
-        <select
-          name="serviceMode"
-          value={searchForm.serviceMode}
-          onChange={handleChange}
-        >
-          <option value="">Any Mode</option>
-          <option value="REMOTE">REMOTE</option>
-          <option value="LOCAL">LOCAL</option>
-        </select>
-        <br />
+          <select
+            name="serviceMode"
+            value={searchForm.serviceMode}
+            onChange={handleChange}
+          >
+            <option value="">Any Mode</option>
+            <option value="REMOTE">REMOTE</option>
+            <option value="LOCAL">LOCAL</option>
+          </select>
 
-        <input
-          name="minExperience"
-          type="number"
-          placeholder="Min Experience (years)"
-          value={searchForm.minExperience}
-          onChange={handleChange}
-        />
-        <br /><br />
+          <input
+            name="minExperience"
+            type="number"
+            placeholder="Min Experience (years)"
+            value={searchForm.minExperience}
+            onChange={handleChange}
+          />
+        </div>
 
-        <button type="submit">Search</button>
+        <button type="submit" className="btn-primary">Search</button>
       </form>
 
-      {message && <p>{message}</p>}
+      {message && <p className="message message-info">{message}</p>}
 
       {providers.length > 0 && (
         <div>
-          <h4>Search Results:</h4>
+          <h4>Search Results ({providers.length})</h4>
           {providers.map((provider) => (
-            <div key={`${provider.id}-${provider.skillName}`}>
-              <b>Provider: {provider.username}</b> (ID: {provider.id})<br />
-              <b>Skill: {provider.skillName}</b><br />
-              Rate: ${provider.rate}/hr<br />
-              Experience: {provider.experience} years<br />
-              Mode: {provider.serviceMode}<br />
-              Description: {provider.description}
-              <hr />
+            <div key={`${provider.id}-${provider.skillName}`} className="card bg-hover mb-md">
+              <div className="flex justify-between">
+                <div>
+                  <h4 className="text-primary">{provider.username} <small className="text-muted">(ID: {provider.id})</small></h4>
+                  <p className="text-lg"><b>{provider.skillName}</b></p>
+                  <p className="text-muted">{provider.description}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xl"><b>${provider.rate}/hr</b></p>
+                  <p>{provider.experience} years exp</p>
+                  <span className="status-badge status-accepted">{provider.serviceMode}</span>
+                </div>
+              </div>
             </div>
           ))}
         </div>
