@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { authFetch } from "../jwt-storage/authFetch";
 
-export default function SearchProviders() {
+export default function SearchProviders({ onProviderSelect }) {
 
   const [searchForm, setSearchForm] = useState({
     skill: "",
@@ -108,10 +108,20 @@ export default function SearchProviders() {
                   <p className="text-lg"><b>{provider.skillName}</b></p>
                   <p className="text-muted">{provider.description}</p>
                 </div>
-                <div className="text-right">
-                  <p className="text-xl"><b>${provider.rate}/hr</b></p>
-                  <p>{provider.experience} years exp</p>
-                  <span className="status-badge status-accepted">{provider.serviceMode}</span>
+                <div className="flex flex-col items-end gap-sm text-right">
+                  <div>
+                    <p className="text-xl"><b>${provider.rate}/hr</b></p>
+                    <p className="text-muted text-sm">{provider.experience} years exp</p>
+                  </div>
+                  <div className="flex items-center gap-sm">
+                    <span className="status-badge status-accepted">{provider.serviceMode}</span>
+                    <button
+                      className="btn-primary py-xs px-md text-sm"
+                      onClick={() => onProviderSelect && onProviderSelect(provider)}
+                    >
+                      Book Now
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

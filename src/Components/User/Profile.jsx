@@ -18,6 +18,12 @@ export default function Profile({ onLogout }) {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("profile");
   const [message, setMessage] = useState("");
+  const [selectedProvider, setSelectedProvider] = useState(null);
+
+  const handleProviderSelect = (provider) => {
+    setSelectedProvider(provider);
+    setActiveTab("placeOrder");
+  };
 
   useEffect(() => {
     loadProfile();
@@ -153,9 +159,14 @@ export default function Profile({ onLogout }) {
         {isProvider && activeTab === "receivedOrders" && <ReceivedOrders />}
 
         {/* Consumer Tabs */}
-        {isConsumer && activeTab === "search" && <SearchProviders />}
+        {isConsumer && activeTab === "search" && (
+          <SearchProviders onProviderSelect={handleProviderSelect} />
+        )}
         {isConsumer && activeTab === "placeOrder" && (
-          <PlaceOrder onOrderPlaced={() => setActiveTab("myOrders")} />
+          <PlaceOrder
+            onOrderPlaced={() => setActiveTab("myOrders")}
+            prefilledProvider={selectedProvider}
+          />
         )}
         {isConsumer && activeTab === "myOrders" && <MyOrders />}
       </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { authFetch } from "../jwt-storage/authFetch";
 
-export default function PlaceOrder({ onOrderPlaced }) {
+export default function PlaceOrder({ onOrderPlaced, prefilledProvider }) {
 
   const [skills, setSkills] = useState([]);
   const [form, setForm] = useState({
@@ -25,6 +25,18 @@ export default function PlaceOrder({ onOrderPlaced }) {
       setMessage(err.message || "Failed to load skills");
     }
   };
+
+  useEffect(() => {
+    if (prefilledProvider && skills.length > 0) {
+      const matchedSkill = skills.find(s => s.skillName === prefilledProvider.skillName);
+      setForm(prev => ({
+        ...prev,
+        providerId: prefilledProvider.id,
+        skillId: matchedSkill ? matchedSkill.id : prev.skillId,
+        estimatedHours: ""
+      }));
+    }
+  }, [prefilledProvider, skills]);
 
   const handleChange = (e) => {
     setForm({
